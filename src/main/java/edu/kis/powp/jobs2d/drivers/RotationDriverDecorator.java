@@ -2,11 +2,11 @@ package edu.kis.powp.jobs2d.drivers;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 
-public class RotationDriver implements Job2dDriver {
+public class RotationDriverDecorator implements Job2dDriver {
     private Job2dDriver driver;
     private double angle;
 
-    public RotationDriver(Job2dDriver driver, double angleDegree) {
+    public RotationDriverDecorator(Job2dDriver driver, double angleDegree) {
         this.driver = driver;
         this.angle = Math.toRadians(angleDegree);
     }
