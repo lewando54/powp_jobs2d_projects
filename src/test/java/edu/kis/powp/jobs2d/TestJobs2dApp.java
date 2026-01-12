@@ -51,11 +51,7 @@ public class TestJobs2dApp {
     private static void setupCommandTests(Application application) {
         application.getFreePanel().addMouseListener(new CanvasMouseListener());
         application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
-
         application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
-        
-        //application.addTest("Display Command Counter", new SelectDisplayCommandCounterOptionListener(CommandsFeature.getDriverCommandManager()));
-
     }
 
     /**
