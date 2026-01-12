@@ -20,8 +20,7 @@ import edu.kis.powp.jobs2d.features.CommandsFeature;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
 
-import edu.kis.powp.jobs2d.drivers.TransformerDriverDecorator;
-import edu.kis.powp.jobs2d.drivers.RotationDriverDecorator;
+import edu.kis.powp.jobs2d.drivers.transformation.DriverFeatureFactory;
 
 public class TestJobs2dApp {
     private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -94,18 +93,14 @@ public class TestJobs2dApp {
         Job2dDriver specialLineWithLoggerDriver = new DriverComposite(Arrays.asList(specialLineDriver, loggerDriver));
         DriverFeature.addDriver("Logger + Special line", specialLineWithLoggerDriver);
 
-        Job2dDriver scaleDriver = new TransformerDriverDecorator(basicLineDriver, 2.0d, 2.0d);
-        DriverFeature.addDriver("Basic Line x2", scaleDriver);
+        Job2dDriver rotatedDriver = DriverFeatureFactory.createRotateDriver(basicLineDriver, 45);
+        DriverFeature.addDriver("Basic Line + Rotate 45", rotatedDriver);
 
-        Job2dDriver smallDriver = new TransformerDriverDecorator(basicLineDriver, 0.5d, 0.5d);
-        DriverFeature.addDriver("Basic Line x0.5", smallDriver);
+        Job2dDriver scaledDriver = DriverFeatureFactory.createScaleDriver(basicLineDriver, 2.0);
+        DriverFeature.addDriver("Basic Line + Scale 2x", scaledDriver);
 
-        Job2dDriver flipDriver = new TransformerDriverDecorator(basicLineDriver, -1.0d, 1.0d);
-        DriverFeature.addDriver("Basic Line Flip X", flipDriver);
-
-        Job2dDriver rotateDriver = new RotationDriverDecorator(basicLineDriver, 90);
-        DriverFeature.addDriver("Basic Line Rotate 90 degrees", rotateDriver);
-
+        Job2dDriver flippedDriver = DriverFeatureFactory.createFlipDriver(basicLineDriver, true, false);
+        DriverFeature.addDriver("Basic Line + Flip Horizontal", flippedDriver);
 
         DriverFeature.updateDriverInfo();
     }
