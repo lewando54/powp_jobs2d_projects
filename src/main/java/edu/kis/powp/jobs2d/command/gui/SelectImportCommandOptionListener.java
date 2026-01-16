@@ -1,0 +1,44 @@
+package edu.kis.powp.jobs2d.command.gui;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.nio.file.Files;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import edu.kis.powp.jobs2d.command.importer.JsonCommandImportParser;
+import edu.kis.powp.jobs2d.command.manager.CommandManager;
+
+public class SelectImportCommandOptionListener implements ActionListener {
+    private final CommandManager commandManager;
+
+    public SelectImportCommandOptionListener(CommandManager commandManager) {
+        this.commandManager = commandManager;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("JSON files", "json"));
+        int response = fileChooser.showOpenDialog(null);
+
+        if (response == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                // Odczyt pliku do Stringa
+                String content = new String(Files.readAllBytes(file.toPath()));
+
+                // Wywołanie nowego API przygotowanego przez kolegę w CommandManager
+                commandManager.importCurrentCommandFromText(content, new JsonCommandImportParser());
+
+                // Feedback dla użytkownika (Success)
+                JOptionPane.showMessageDialog(null, "Command imported successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                // Feedback dla użytkownika (Error)
+                JOptionPane.showMessageDialog(null, "Error during import: " + ex.getMessage(), "Import Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+}
