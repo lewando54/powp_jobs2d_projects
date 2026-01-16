@@ -18,12 +18,14 @@ import edu.kis.powp.jobs2d.drivers.UsageTrackingDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.visitor.VisitableJob2dDriver;
 import edu.kis.powp.jobs2d.events.*;
+import edu.kis.powp.jobs2d.features.CanvasFeature;
 import edu.kis.powp.jobs2d.features.CommandsFeature;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
 import edu.kis.powp.jobs2d.features.MonitoringFeature;
 
 import edu.kis.powp.jobs2d.drivers.transformation.DriverFeatureFactory;
+import edu.kis.powp.jobs2d.canvas.CanvasFactory;
 
 import edu.kis.powp.jobs2d.drivers.transformation.DriverFeatureFactory;
 
@@ -131,6 +133,19 @@ public class TestJobs2dApp {
     }
 
     /**
+     * Setup canvas options.
+     * 
+     * @param application Application context.
+     */
+    private static void setupCanvases(Application application) {
+        CanvasFeature.addCanvas("None", null);
+        CanvasFeature.addCanvas(CanvasFactory.createA4());
+        CanvasFeature.addCanvas(CanvasFactory.createA3());
+        CanvasFeature.addCanvas(CanvasFactory.createB4());
+        CanvasFeature.addCanvas(CanvasFactory.createCircle(200));
+    }
+
+    /**
      * Setup menu for adjusting logging settings.
      * 
      * @param application Application context.
@@ -157,11 +172,13 @@ public class TestJobs2dApp {
             public void run() {
                 Application app = new Application("Jobs 2D");
                 DrawerFeature.setupDrawerPlugin(app);
+                CanvasFeature.setupCanvasPlugin(app);
                 CommandsFeature.setupCommandManager();
 
                 DriverFeature.setupDriverPlugin(app);
                 setupDrivers(app);
                 MonitoringFeature.setupMonitoringPlugin(app, logger);
+                setupCanvases(app);
                 setupPresetTests(app);
                 setupCommandTests(app);
                 setupLogger(app);
