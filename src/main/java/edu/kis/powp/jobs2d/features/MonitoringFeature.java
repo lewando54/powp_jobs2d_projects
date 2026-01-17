@@ -21,6 +21,8 @@ public final class MonitoringFeature {
     /** Target logger where summaries are printed. */
     private static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
+    private static boolean monitoringEnabled = true;
+
     private MonitoringFeature() {
     }
 
@@ -36,7 +38,10 @@ public final class MonitoringFeature {
             logger = monitoringLogger;
         }
 
+
         app.addComponentMenu(MonitoringFeature.class, "Monitoring", 0);
+        app.addComponentMenuElementWithCheckBox(MonitoringFeature.class, "Toggle Monitoring",
+            (ActionEvent e) -> monitoringEnabled = !monitoringEnabled, true);
         app.addComponentMenuElement(MonitoringFeature.class, "Report usage summary", MonitoringFeature::logUsage);
         app.addComponentMenuElement(MonitoringFeature.class, "Reset counters", MonitoringFeature::resetCounters);
     }
@@ -86,5 +91,9 @@ public final class MonitoringFeature {
             driver.reset();
         }
         logger.info("Monitoring: all counters reset");
+    }
+
+    public static boolean isMonitoringEnabled() {
+        return monitoringEnabled;
     }
 }

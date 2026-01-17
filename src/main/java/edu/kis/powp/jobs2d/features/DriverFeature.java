@@ -1,6 +1,7 @@
 package edu.kis.powp.jobs2d.features;
 
 import edu.kis.powp.appbase.Application;
+import edu.kis.powp.jobs2d.drivers.UsageTrackingDriverDecorator;
 import edu.kis.powp.jobs2d.visitor.VisitableJob2dDriver;
 import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.SelectDriverMenuOptionListener;
@@ -31,7 +32,9 @@ public class DriverFeature {
      * @param driver VisitableJob2dDriver object.
      */
     public static void addDriver(String name, VisitableJob2dDriver driver) {
-        SelectDriverMenuOptionListener listener = new SelectDriverMenuOptionListener(driver, driverManager);
+        UsageTrackingDriverDecorator monitoredDriver = new UsageTrackingDriverDecorator(driver, name);
+        MonitoringFeature.registerMonitoredDriver(name, monitoredDriver);
+        SelectDriverMenuOptionListener listener = new SelectDriverMenuOptionListener(monitoredDriver, driverManager);
         app.addComponentMenuElement(DriverFeature.class, name, listener);
     }
 

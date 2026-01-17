@@ -18,7 +18,6 @@ import edu.kis.powp.jobs2d.command.importer.JsonCommandImportParser;
 import edu.kis.powp.jobs2d.drivers.AnimatedDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.LoggerDriver;
 import edu.kis.powp.jobs2d.drivers.DriverComposite;
-import edu.kis.powp.jobs2d.drivers.UsageTrackingDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.visitor.VisitableJob2dDriver;
 import edu.kis.powp.jobs2d.events.*;
@@ -102,15 +101,6 @@ public class TestJobs2dApp {
 
         VisitableJob2dDriver specialLineWithLoggerDriver = new DriverComposite(Arrays.asList(specialLineDriver, loggerDriver));
         DriverFeature.addDriver("Logger + Special line", specialLineWithLoggerDriver);
-
-        // Add monitored versions of drivers
-        UsageTrackingDriverDecorator monitoredBasicLine = new UsageTrackingDriverDecorator(basicLineDriver, "Basic line [monitored]");
-        MonitoringFeature.registerMonitoredDriver("Basic line [monitored]", monitoredBasicLine);
-        DriverFeature.addDriver("Basic line [monitored]", monitoredBasicLine);
-
-        UsageTrackingDriverDecorator monitoredSpecialLine = new UsageTrackingDriverDecorator(specialLineDriver, "Special line [monitored]");
-        MonitoringFeature.registerMonitoredDriver("Special line [monitored]", monitoredSpecialLine);
-        DriverFeature.addDriver("Special line [monitored]", monitoredSpecialLine);
 
         // Set default driver
         DriverFeature.getDriverManager().setCurrentDriver(basicLineDriver);
