@@ -15,12 +15,16 @@ import edu.kis.powp.jobs2d.command.gui.CommandPreviewWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandPreviewWindowObserver;
 import edu.kis.powp.jobs2d.command.gui.SelectImportCommandOptionListener;
 import edu.kis.powp.jobs2d.command.importer.JsonCommandImportParser;
+import edu.kis.powp.jobs2d.command.manager.CommandManager;
 import edu.kis.powp.jobs2d.drivers.AnimatedDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.LoggerDriver;
 import edu.kis.powp.jobs2d.drivers.RecordingDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.DriverComposite;
 import edu.kis.powp.jobs2d.drivers.UsageTrackingDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
+import edu.kis.powp.jobs2d.drivers.transformation.FlipStrategy;
+import edu.kis.powp.jobs2d.drivers.transformation.RotateStrategy;
+import edu.kis.powp.jobs2d.drivers.transformation.ScaleStrategy;
 import edu.kis.powp.jobs2d.visitor.VisitableJob2dDriver;
 import edu.kis.powp.jobs2d.events.*;
 import edu.kis.powp.jobs2d.features.CanvasFeature;
@@ -68,6 +72,14 @@ public class TestJobs2dApp {
         ViewFeature.addMouseListenerToControlPanel(new CanvasMouseListener());
         application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
         application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
+
+        CommandManager manager = CommandsFeature.getDriverCommandManager();
+        application.addTest("Scale x2",
+                new SelectCommandTransformationOptionListener(manager, new ScaleStrategy(2)));
+        application.addTest("Rotate 90 degrees",
+                new SelectCommandTransformationOptionListener(manager, new RotateStrategy(90)));
+        application.addTest("Flip",
+                new SelectCommandTransformationOptionListener(manager, new FlipStrategy(true, false)));
     }
 
     /**
