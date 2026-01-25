@@ -4,7 +4,6 @@ import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -27,11 +26,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
     private JButton btnRunCommand;
     private String observerListString;
     private JTextArea observerListField;
-    private List<Subscriber> observersStore = null;
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 9204679248304669948L;
 
     public CommandManagerWindow(CommandManager commandManager, DriverManager driverManager) {
@@ -101,9 +96,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
     }
 
     private void runCommand() {
-        if (commandManager.getCurrentCommand() != null) {
-            commandManager.getCurrentCommand().execute(driverManager.getCurrentDriver());
-        }
+        commandManager.runCurrentCommand(driverManager.getCurrentDriver());
     }
 
     public void updateCurrentCommandField() {
@@ -112,15 +105,10 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
     public void deleteObservers() {
         if (btnClearObservers.getText().equals("Delete observers")) {
-            observersStore = new ArrayList<>(commandManager.getChangePublisher().getSubscribers());
-            commandManager.getChangePublisher().clearObservers();
+            commandManager.deleteObservers();
             btnClearObservers.setText("Reset observers");
         } else {
-            if (observersStore != null) {
-                for (Subscriber subscriber : observersStore) {
-                    commandManager.getChangePublisher().addSubscriber(subscriber);
-                }
-            }
+            commandManager.resetObservers();
             btnClearObservers.setText("Delete observers");
         }
         this.updateObserverListField();
@@ -128,7 +116,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
     public void updateObserverListField() {
         observerListString = "";
-        List<Subscriber> commandChangeSubscribers = commandManager.getChangePublisher().getSubscribers();
+        List<Subscriber> commandChangeSubscribers = commandManager.getSubscribers();
         for (Subscriber observer : commandChangeSubscribers) {
             observerListString += observer.toString() + System.lineSeparator();
         }
