@@ -39,7 +39,7 @@ public class TestJobs2dApp {
 
     /**
      * Setup test concerning preset figures in context.
-     * 
+     *
      * @param application Application context.
      */
     private static void setupPresetTests(Application application) {
@@ -61,22 +61,18 @@ public class TestJobs2dApp {
 
     /**
      * Setup test using driver commands in context.
-     * 
+     *
      * @param application Application context.
      */
     private static void setupCommandTests(Application application) {
         ViewFeature.addMouseListenerToControlPanel(new CanvasMouseListener());
         application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
-        application.addTest("Flip command", new SelectRunCurrentFlippedCommandOptionListener());
-        application.addTest("Rotate 90 command", new SelectRunCurrentRotatedCommandOptionListener());
-        application.addTest("Scale 2.0 command", new SelectRunCurrentScaledUpCommandOptionListener());
-        application.addTest("Scale 0.5 command", new SelectRunCurrentScaledDownCommandOptionListener());
-        application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
     }
+
 
     /**
      * Setup driver manager, and set default VisitableJob2dDriver for application.
-     * 
+     *
      * @param application Application context.
      */
     private static void setupDrivers(Application application) {
@@ -112,7 +108,7 @@ public class TestJobs2dApp {
         SelectLoadRecordedCommandOptionListener selectLoadRecordedCommandOptionListener = new SelectLoadRecordedCommandOptionListener(recordingDriver);
         application.addTest("Stop recording & Load recorded command", selectLoadRecordedCommandOptionListener);
         DriverFeature.addDriver("Recording Driver", recordingDriver);
-        
+
         // Add monitored versions of drivers
         UsageTrackingDriverDecorator monitoredBasicLine = new UsageTrackingDriverDecorator(basicLineDriver, "Basic line [monitored]");
         MonitoringFeature.registerMonitoredDriver("Basic line [monitored]", monitoredBasicLine);
@@ -154,7 +150,7 @@ public class TestJobs2dApp {
         commandManager.setPreviewWindow(commandPreviewWindow);
         application.addWindowComponent("Command Preview", commandPreviewWindow);
         CommandPreviewWindowObserver previewObserver = new CommandPreviewWindowObserver(
-                commandPreviewWindow, 
+                commandPreviewWindow,
                 CommandsFeature.getDriverCommandManager()
         );
         CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(previewObserver);
@@ -162,7 +158,7 @@ public class TestJobs2dApp {
 
     /**
      * Setup canvas options.
-     * 
+     *
      * @param application Application context.
      */
     private static void setupCanvases(Application application) {
@@ -175,7 +171,7 @@ public class TestJobs2dApp {
 
     /**
      * Setup view options (zoom, pan, reset).
-     * 
+     *
      * @param application Application context.
      */
     private static void setupView(Application application) {
@@ -190,7 +186,7 @@ public class TestJobs2dApp {
 
     /**
      * Setup menu for adjusting logging settings.
-     * 
+     *
      * @param application Application context.
      */
     private static void setupLogger(Application application) {
@@ -218,6 +214,7 @@ public class TestJobs2dApp {
                 DrawerFeature.setupDrawerPlugin(app);
                 CanvasFeature.setupCanvasPlugin(app);
                 CommandsFeature.setupCommandManager();
+                CommandsFeature.setupCommandsMenu(app);
 
                 DriverFeature.setupDriverPlugin(app);
                 setupDrivers(app);
