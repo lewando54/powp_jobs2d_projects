@@ -22,9 +22,7 @@ import edu.kis.powp.jobs2d.drivers.RecordingDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.DriverComposite;
 import edu.kis.powp.jobs2d.drivers.UsageTrackingDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.drivers.transformation.FlipStrategy;
-import edu.kis.powp.jobs2d.drivers.transformation.RotateStrategy;
-import edu.kis.powp.jobs2d.drivers.transformation.ScaleStrategy;
+import edu.kis.powp.jobs2d.drivers.transformation.*;
 import edu.kis.powp.jobs2d.visitor.VisitableJob2dDriver;
 import edu.kis.powp.jobs2d.events.*;
 import edu.kis.powp.jobs2d.features.CanvasFeature;
@@ -34,7 +32,6 @@ import edu.kis.powp.jobs2d.features.DriverFeature;
 import edu.kis.powp.jobs2d.features.MonitoringFeature;
 import edu.kis.powp.jobs2d.features.ViewFeature;
 
-import edu.kis.powp.jobs2d.drivers.transformation.DriverFeatureFactory;
 import edu.kis.powp.jobs2d.canvas.CanvasFactory;
 
 
@@ -80,6 +77,10 @@ public class TestJobs2dApp {
                 new SelectCommandTransformationOptionListener(manager, new RotateStrategy(90)));
         application.addTest("Flip",
                 new SelectCommandTransformationOptionListener(manager, new FlipStrategy(true, false)));
+        application.addTest("Shift (right: 15)",
+                new SelectCommandTransformationOptionListener(manager, new ShiftStrategy(15, 0)));
+        application.addTest("Shift (down: 15)",
+                new SelectCommandTransformationOptionListener(manager, new ShiftStrategy(0, 15)));
     }
 
     /**
