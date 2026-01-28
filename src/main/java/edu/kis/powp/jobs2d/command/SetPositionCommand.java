@@ -21,7 +21,6 @@ public class SetPositionCommand implements DriverCommand {
     }
 
     public int getPosY() {
-
 		return posY;
     }
 
@@ -42,13 +41,5 @@ public class SetPositionCommand implements DriverCommand {
     @Override
     public void accept(CommandVisitor visitor) {
         visitor.visit(this);
-    }
-
-    public int getPosX() {
-        return posX;
-    }
-
-    public int getPosY() {
-        return posY;
     }
 }
