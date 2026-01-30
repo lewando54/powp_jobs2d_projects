@@ -1,37 +1,51 @@
 package edu.kis.powp.jobs2d.features;
 
 import edu.kis.powp.appbase.Application;
-import edu.kis.powp.jobs2d.visitor.VisitableJob2dDriver;
 import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.SelectDriverMenuOptionListener;
+import edu.kis.powp.jobs2d.visitor.VisitableJob2dDriver;
 
-public class DriverFeature {
+public class DriverFeature implements IFeature {
 
     private static DriverManager driverManager = new DriverManager();
     private static Application app;
+
+    public DriverFeature() {
+    }
 
     public static DriverManager getDriverManager() {
         return driverManager;
     }
 
+    private static DriverConfigurationStrategy configStrategy = (name, driver) -> driver;
+
+    @Override
+    public void setup(Application application) {
+        app = application;
+        setupDriverPlugin(application);
+    }
+
     /**
      * Setup jobs2d drivers Plugin and add to application.
-     * 
+     *
      * @param application Application context.
      */
-    public static void setupDriverPlugin(Application application) {
+    private static void setupDriverPlugin(Application application) {
         app = application;
         app.addComponentMenu(DriverFeature.class, "Drivers");
+        driverManager.getChangePublisher().addSubscriber(DriverFeature::updateDriverInfo);
     }
 
     /**
      * Add driver to context, create button in driver menu.
-     * 
+     *
      * @param name   Button name.
      * @param driver VisitableJob2dDriver object.
      */
     public static void addDriver(String name, VisitableJob2dDriver driver) {
-        SelectDriverMenuOptionListener listener = new SelectDriverMenuOptionListener(driver, driverManager);
+        VisitableJob2dDriver finalDriver = configStrategy.configure(name, driver);
+
+        SelectDriverMenuOptionListener listener = new SelectDriverMenuOptionListener(finalDriver, driverManager);
         app.addComponentMenuElement(DriverFeature.class, name, listener);
     }
 
@@ -40,6 +54,15 @@ public class DriverFeature {
      */
     public static void updateDriverInfo() {
         app.updateInfo(driverManager.getCurrentDriver().toString());
+    }
+
+    public static void setConfigurationStrategy(DriverConfigurationStrategy strategy) {
+        configStrategy = strategy;
+    }
+
+    @Override
+    public String getName() {
+        return "Driver";
     }
 
 }

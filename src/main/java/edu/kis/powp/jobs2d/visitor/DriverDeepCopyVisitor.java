@@ -3,19 +3,26 @@ package edu.kis.powp.jobs2d.visitor;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import edu.kis.powp.jobs2d.Job2dDriver;
+import edu.kis.legacy.drawer.shape.ILine;
+
 import edu.kis.powp.jobs2d.drivers.AnimatedDriverDecorator;
+import edu.kis.powp.jobs2d.drivers.CanvasLimitedDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.DriverComposite;
 import edu.kis.powp.jobs2d.drivers.LoggerDriver;
 import edu.kis.powp.jobs2d.drivers.RecordingDriverDecorator;
+import edu.kis.powp.jobs2d.drivers.UsageTrackingDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.transformation.TransformerDriverDecorator;
-import edu.kis.powp.jobs2d.drivers.UsageTrackingDriverDecorator;
-import edu.kis.legacy.drawer.shape.ILine;
 
 public class DriverDeepCopyVisitor implements DriverVisitor {
 
     private VisitableJob2dDriver copy;
+
+    public static VisitableJob2dDriver createDeepCopyOf(VisitableJob2dDriver driver) {
+        DriverDeepCopyVisitor visitor = new DriverDeepCopyVisitor();
+        driver.accept(visitor);
+        return visitor.getCopy();
+    }
 
     public VisitableJob2dDriver getCopy() {
         return copy;
@@ -56,14 +63,9 @@ public class DriverDeepCopyVisitor implements DriverVisitor {
 
     @Override
     public void visit(TransformerDriverDecorator transformerDriverDecorator) {
-        Job2dDriver driver = transformerDriverDecorator.getDriver();
-        if (driver instanceof VisitableJob2dDriver) {
-            ((VisitableJob2dDriver) driver).accept(this);
-            VisitableJob2dDriver innerCopy = copy;
-            copy = new TransformerDriverDecorator(innerCopy, transformerDriverDecorator.getStrategy());
-        } else {
-            copy = new TransformerDriverDecorator(driver, transformerDriverDecorator.getStrategy());
-        }
+        transformerDriverDecorator.getDriver().accept(this);
+        VisitableJob2dDriver innerCopy = copy;
+        copy = new TransformerDriverDecorator(innerCopy, transformerDriverDecorator.getStrategy());
     }
 
     @Override
@@ -74,9 +76,18 @@ public class DriverDeepCopyVisitor implements DriverVisitor {
     }
 
     @Override
+    public void visit(CanvasLimitedDriverDecorator canvasLimitedDriverDecorator) {
+        canvasLimitedDriverDecorator.getTargetDriver().accept(this);
+        VisitableJob2dDriver targetCopy = copy;
+        copy = new CanvasLimitedDriverDecorator(targetCopy, canvasLimitedDriverDecorator.getOnCanvasExceededStrategy());
+    }
+
+    @Override
     public void visit(RecordingDriverDecorator recordingDriverDecorator) {
         recordingDriverDecorator.getDelegate().accept(this);
         VisitableJob2dDriver targetCopy = copy;
         copy = new RecordingDriverDecorator(targetCopy);
     }
+
+
 }
