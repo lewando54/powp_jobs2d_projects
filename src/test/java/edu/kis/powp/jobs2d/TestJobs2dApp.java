@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
@@ -186,7 +187,13 @@ public class TestJobs2dApp {
 
     private static void setupWindows(Application application) {
 
-        CommandManagerWindow commandManager = new CommandManagerWindow(CommandsFeature.getDriverCommandManager(), DriverFeature.getDriverManager());
+        CommandManagerWindow commandManager = new CommandManagerWindow(CommandsFeature.getDriverCommandManager());
+        commandManager.setRunCommandActionListener(e -> {
+            DriverCommand command = CommandsFeature.getDriverCommandManager().getCurrentCommand();
+            if (command != null) {
+                command.execute(DriverFeature.getDriverManager().getCurrentDriver());
+            }
+        });
         SelectImportCommandOptionListener importListener = new SelectImportCommandOptionListener(
                 CommandsFeature.getDriverCommandManager(), new JsonCommandImportParser());
         commandManager.setImportActionListener(importListener);

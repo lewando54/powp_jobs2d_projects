@@ -1,9 +1,10 @@
 package edu.kis.powp.jobs2d.features;
 
 import edu.kis.powp.appbase.Application;
-import edu.kis.powp.jobs2d.command.manager.CommandManager;
 import edu.kis.powp.jobs2d.command.manager.CommandHistory;
 import edu.kis.powp.jobs2d.command.manager.CommandHistorySubscriber;
+import edu.kis.powp.jobs2d.command.manager.CommandManager;
+import edu.kis.powp.jobs2d.command.manager.DefaultCommandManager;
 import edu.kis.powp.jobs2d.command.manager.LoggerCommandChangeObserver;
 
 public class CommandsFeature implements IFeature {
@@ -21,7 +22,7 @@ public class CommandsFeature implements IFeature {
     }
 
     private static void setupCommandManager() {
-        commandManager = new CommandManager();
+        commandManager = new DefaultCommandManager();
 
         LoggerCommandChangeObserver loggerObserver = new LoggerCommandChangeObserver();
         commandManager.getChangePublisher().addSubscriber(loggerObserver);
