@@ -20,6 +20,7 @@ import edu.kis.powp.jobs2d.features.ViewFeature;
 import java.awt.EventQueue;
 import java.util.logging.Logger;
 
+
 public class TestJobs2dApp {
     private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
@@ -33,8 +34,7 @@ public class TestJobs2dApp {
                 DriverFeature.getDriverManager());
         SelectTestFigure2OptionListener selectTestFigure2OptionListener = new SelectTestFigure2OptionListener(
                 DriverFeature.getDriverManager());
-        SelectTestCompoundCommandOptionListener selectTestCompoundCommandOptionListener = new SelectTestCompoundCommandOptionListener(
-                DriverFeature.getDriverManager());
+        SelectTestCompoundCommandOptionListener selectTestCompoundCommandOptionListener = new SelectTestCompoundCommandOptionListener();
         
         CommandManager commandManager = CommandsFeature.getDriverCommandManager();
         SelectCountCommandOptionListener selectCountCommandOptionListener = new SelectCountCommandOptionListener(
